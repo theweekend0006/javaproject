@@ -1,6 +1,8 @@
 pipeline {
     agent any
-    triggers { githubPush() }
+    triggers {
+        githubPush()  // Webhook trigger
+    }
 
     stages {
         stage('Checkout') {
@@ -11,19 +13,23 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                bat 'mvn clean install'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
     }
 
     post {
-        success { echo 'Build successful via webhook' }
-        failure { echo 'Build failed' }
+        success {
+            echo 'Build successful via webhook'
+        }
+        failure {
+            echo 'Build failed'
+        }
     }
 }
