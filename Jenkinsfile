@@ -1,31 +1,29 @@
 pipeline {
     agent any
-    triggers {
-        githubPush()  // Webhook trigger
-    }
+    triggers { githubPush() }
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/user/mavenpipeline.git'
+                echo 'Code already cloned by Jenkinsfile SCM'
             }
         }
+
         stage('Build') {
             steps {
-                sh 'mvn clean install'  // uses pom.xml
+                sh 'mvn clean install'
             }
         }
+
         stage('Test') {
             steps {
                 sh 'mvn test'
             }
         }
     }
+
     post {
-        success {
-            echo 'Build successful via GitHub Webhook'
-        }
-        failure {
-            echo 'Build failed'
-        }
+        success { echo 'Build successful via webhook' }
+        failure { echo 'Build failed' }
     }
 }
